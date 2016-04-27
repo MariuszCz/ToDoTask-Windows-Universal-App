@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using ToDoTask.ViewModel;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
@@ -26,35 +27,20 @@ namespace ToDoTask
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private LocalSettingsHandler localSettingsHandler;
+        
         public MainPage()
         {
             this.InitializeComponent();
-            /*   var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-               Object value = localSettings.Values["exampleSetting"];
-               if(value!=null)
-               {
-                   textBox.Text = localSettings.Values["exampleSetting"].ToString();
-
-               }*/
-            //  localSettings.Values["exampleSetting"] = "Hello Windows";
-            localSettingsHandler = new LocalSettingsHandler();
-
-            String text = localSettingsHandler.getFromLoadSettings("userLogin");
-            if (text != null)
-            {
-                 user.Text = text;
-            }
+            DataContext = new MainPageViewModel();
         }
+        private MainPageViewModel GetViewModel()
+        {
+            return DataContext as MainPageViewModel;
+        }
+    
 
         private async void button_add(object sender, RoutedEventArgs e)
         {
-            // var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-            //Object value = localSettings.Values["exampleSetting"];
-            //  localSettings.Values["exampleSettings"] = textBox.Text;
-            //  Serialize();
-            // RestConnection rest = new RestConnection();
-            // rest.createClient();
             if (Title.Text != "" && Value.Text != "")
             {
                 TaskManagement taskManagement = new TaskManagement();

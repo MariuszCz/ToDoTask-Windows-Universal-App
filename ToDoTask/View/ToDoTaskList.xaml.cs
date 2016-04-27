@@ -8,9 +8,11 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Runtime.InteropServices.WindowsRuntime;
+using ToDoTask.ViewModel;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
+using Windows.UI;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -28,44 +30,19 @@ namespace ToDoTask
     public sealed partial class ToDoTaskList : Page
     {
         private string selected;
-        private LocalSettingsHandler localSettingsHandler;
-        List<ToDoTask> list;
-        ToDoTask newTask = new ToDoTask();
-        //   private ObservableCollection<ToDoTask> list;
-        //   public ToDoTask ObservableCollection { get; set; }
+
         public ToDoTaskList()
         {
-            TaskManagement taskmanagement = new TaskManagement();
+            
             this.InitializeComponent();
-            localSettingsHandler = new LocalSettingsHandler();
-
-            String text = localSettingsHandler.getFromLoadSettings("userLogin");
-            if (text != null)
-            {
-                user.Text = text;
-                getTasks(user.Text);
-            }
-
-            //    ToDoTask newTask = new ToDoTask();
-            // Debug.Write(list[0].Title);
-            //  listView.ItemsSource = taskmanagement.getList();
+            DataContext = new ToDoTaskListViewModel();
         }
-
-        public async void getTasks(string ownerId)
+        private ToDoTaskListViewModel GetViewModel()
         {
-            var conn = new HttpClient();
-            conn.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            HttpResponseMessage response = await conn.GetAsync("http://windowsphoneuam.azurewebsites.net/api/ToDoTasks?ownerId=" + ownerId);
-            response.EnsureSuccessStatusCode();
-            string responseBody = await response.Content.ReadAsStringAsync();
-            //list = JsonConvert.DeserializeObject<ObservableCollection<ToDoTask>>(responseBody);
-
-            list = (JsonConvert.DeserializeObject<List<ToDoTask>>(responseBody));
-            listView.DataContext = list;
-
-
+            return DataContext as ToDoTaskListViewModel;
         }
-    
+
+
 
         private void listView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -73,7 +50,6 @@ namespace ToDoTask
 
             if (sel != null)
             {
-               // thisApp.Edytowalne = Zazn;
                 selected = sel.Id;
                 Debug.Write(selected);
             }
@@ -96,7 +72,7 @@ namespace ToDoTask
         {
             if (listView.SelectedIndex >= 0)
             {
-
+                listView.Background = new SolidColorBrush(Colors.Red);
                 deleteTask(sender);
 
             }
@@ -107,9 +83,34 @@ namespace ToDoTask
             }
         }
 
+
         private void Back_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(MainPage));
+        }
+
+        private void UIElement_OnManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
+        {
+
+            e.Handled = true;
+            ListViewItem item = sender as ListViewItem;
+            if (item == null) return;
+            if (e.Cumulative.Translation.X < 0)
+            {
+                 deleteTask(sender);
+       
+            }
+        }
+
+        private void ShowFlyoutPopup(object sender, RoutedEventArgs e)
+        {
+            if (!logincontrol1.IsOpen)
+            {
+                RootPopupBorder.Width = 646;
+          //      logincontrol1.HorizontalOffset = Window.Current.Bounds.Width - 550;
+          //      logincontrol1.VerticalOffset = Window.Current.Bounds.Height - 1000;
+                logincontrol1.IsOpen = true;
+            }
         }
     }
 }
