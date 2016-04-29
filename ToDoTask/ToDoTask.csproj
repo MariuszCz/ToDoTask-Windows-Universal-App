@@ -113,7 +113,6 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TaskManagement.cs" />
     <Compile Include="Model\ToDoTask.cs" />
   </ItemGroup>
   <ItemGroup>

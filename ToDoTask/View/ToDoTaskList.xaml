@@ -14,39 +14,34 @@
         <AppBarButton x:Name="DeleteTask" HorizontalAlignment="Left" Icon="Delete" Label="Delete Task" Margin="242,194,0,0" VerticalAlignment="Top" Click="bar_delete"/>
 
         <ListView x:Name="listView"
-          Margin="600,10,52,0"
+          Margin="872,10,213,0"
           ItemsSource="{Binding TaskList}"
-                  SelectionMode = "Multiple"
+                  SelectionMode = "Single"
                   SelectionChanged="listView_SelectionChanged"
                    IsSwipeEnabled="False">
 
             <ListView.ItemTemplate>
 
                 <DataTemplate>
-                    <ContentPresenter ManipulationMode="TranslateX, System"
-                                  ManipulationDelta="UIElement_OnManipulationDelta">
-                        <ListViewItem  Width="600" ManipulationMode="TranslateX, System"
-                       ManipulationDelta="UIElement_OnManipulationDelta">
-                            <Grid Height="100" Margin="6">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
+                    <Grid Height="140" Margin="6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
 
-                                <Border  Width="60" Height="100">
-                                    <TextBlock Text="{Binding Id}" TextWrapping="NoWrap"/>
-                                </Border>
+                        <Border  Width="60" Height="100">
+                            <TextBlock Text="{Binding Id}" TextWrapping="NoWrap" FontSize="21.333"/>
+                        </Border>
 
-                                <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="10,0,0,0">
-                                    <TextBox Text="{Binding Title}" TextWrapping="NoWrap"/>
-                                    <TextBox Text="{Binding Value}" TextWrapping="Wrap"/>
-                                    <TextBox Text="{Binding OwnerId}" TextWrapping="NoWrap"/>
-                                    <TextBox Text="{Binding CreatedAt}" TextWrapping="NoWrap"/>
-                                </StackPanel>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="10,0,0,0">
+                            <TextBlock Text="{Binding Title}" TextWrapping="NoWrap" FontSize="21.333"/>
+                            <TextBlock Text="{Binding Value}" TextWrapping="Wrap" FontSize="21.333"/>
+                            <TextBlock Text="{Binding OwnerId}" TextWrapping="NoWrap" FontSize="21.333"/>
+                            <TextBlock Text="{Binding CreatedAt}" TextWrapping="NoWrap" FontSize="21.333"/>
+                        </StackPanel>
 
-                            </Grid>
-                        </ListViewItem>
-                    </ContentPresenter>
+                    </Grid>
+
                 </DataTemplate>
 
             </ListView.ItemTemplate>
@@ -56,29 +51,34 @@
 
         <AppBarButton x:Name="EditTask" HorizontalAlignment="Left" Icon="Edit" Label="Edit Task" Margin="368,194,0,0" VerticalAlignment="Top" Click="ShowFlyoutPopup" RenderTransformOrigin="-0.36,2.096"/>
 
-        <Popup x:Name="logincontrol1" IsOpen="False" IsLightDismissEnabled="True">
+        <Popup x:Name="editPopup" IsOpen="False" IsLightDismissEnabled="True" >
             <Popup.ChildTransitions>
                 <TransitionCollection>
                     <PaneThemeTransition />
                 </TransitionCollection>
             </Popup.ChildTransitions>
             <Border BorderBrush="{StaticResource ApplicationForegroundThemeBrush}" Background="{StaticResource ApplicationPageBackgroundThemeBrush}" x:Name="RootPopupBorder">
-                <StackPanel Orientation="Vertical" Background="WhiteSmoke" Height="500"  x:Name="pop" Width="600" >
+                <StackPanel Orientation="Vertical" Margin="400,200,0,0" Background="WhiteSmoke" Height="500"  x:Name="pop" Width="847" >
                     <StackPanel>
                         <TextBlock Text="Edit your task"  HorizontalAlignment="Center" Foreground="Black" FontSize="25" Margin="0,40,0,0" />
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,60" HorizontalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" Margin="0,40" HorizontalAlignment="Center">
                         <TextBlock Text="Title" Margin="10" Foreground="Black" FontSize="25" />
-                        <TextBox x:Name="Title" IsSpellCheckEnabled="True" Height="40" Margin="13,1" Width="408"  >
+                        <TextBox x:Name="Title" Text="{Binding Path=PopupTask.Title, Mode=TwoWay}" IsSpellCheckEnabled="True" Height="40" Margin="13,1" Width="408"  >
                         </TextBox>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
                         <TextBlock Text="Value" Foreground="Black"  FontSize="25" />
-                        <PasswordBox  x:Name="Value"  IsPasswordRevealButtonEnabled="True" Height="40" Margin="5,1"  Width="408"/>
+                        <TextBox x:Name="Value" Text="{Binding Path=PopupTask.Value, Mode=TwoWay}" Height="40" Margin="5,1"  Width="408"/>
                     </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,40" HorizontalAlignment="Center" >
+                        <TextBlock Text="Created at" Foreground="Black"  FontSize="25" />
+                        <TextBox x:Name="CreatedAt"  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Text="{Binding Path=PopupTask.CreatedAt, Mode=TwoWay}" Height="40" Margin="5,1"  Width="408"/>
+                    </StackPanel>
+                    <TextBlock  x:Name="alert" Text="" Foreground="Red"  FontSize="20"/>
                     <StackPanel Orientation="Horizontal" Margin="0,30" HorizontalAlignment="Center">
-                        <Button x:Name="editclick"  Foreground="Black"   Width="100" Content="Edit"/>
-                        <Button x:Name="cancel"    Foreground="Black"  Width="100" Content="Cancel" />
+                        <Button x:Name="editclick"  Foreground="Black"   Width="100" Content="Change" Click="editTask"/>
+                        <Button x:Name="cancel"    Foreground="Black"  Width="100" Content="Cancel" Click="Cancel" />
                     </StackPanel>
                 </StackPanel>
             </Border>

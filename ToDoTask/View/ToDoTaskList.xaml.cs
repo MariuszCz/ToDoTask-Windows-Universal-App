@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -30,12 +31,13 @@ namespace ToDoTask
     public sealed partial class ToDoTaskList : Page
     {
         private string selected;
-
+        ToDoTaskListViewModel viewModel = new ToDoTaskListViewModel();
         public ToDoTaskList()
         {
             
             this.InitializeComponent();
             DataContext = new ToDoTaskListViewModel();
+           
         }
         private ToDoTaskListViewModel GetViewModel()
         {
@@ -55,26 +57,15 @@ namespace ToDoTask
             }
         }
 
-        public async void deleteTask(object sender)
-        {
-            string apiUrl = "http://windowsphoneuam.azurewebsites.net/api/ToDoTasks";
-    
-            var objClint = new System.Net.Http.HttpClient();
 
-            System.Net.Http.HttpResponseMessage respon = await objClint.DeleteAsync(apiUrl + "/" + selected);
-            string responJsonText = await respon.Content.ReadAsStringAsync();
-            Debug.WriteLine("Wynik JSON'a:");
-            Debug.WriteLine(responJsonText);
-
-        }
 
         private async void bar_delete(object sender, RoutedEventArgs e)
         {
             if (listView.SelectedIndex >= 0)
             {
                 listView.Background = new SolidColorBrush(Colors.Red);
-                deleteTask(sender);
-
+                viewModel.deleteTask(selected);
+                this.Frame.Navigate(typeof(ToDoTaskList));
             }
             else
             {
@@ -97,20 +88,60 @@ namespace ToDoTask
             if (item == null) return;
             if (e.Cumulative.Translation.X < 0)
             {
-                 deleteTask(sender);
+               //  deleteTask(sender);
        
             }
         }
 
-        private void ShowFlyoutPopup(object sender, RoutedEventArgs e)
+        private async void ShowFlyoutPopup(object sender, RoutedEventArgs e)
         {
-            if (!logincontrol1.IsOpen)
+            if (!editPopup.IsOpen && selected != null)
             {
-                RootPopupBorder.Width = 646;
-          //      logincontrol1.HorizontalOffset = Window.Current.Bounds.Width - 550;
-          //      logincontrol1.VerticalOffset = Window.Current.Bounds.Height - 1000;
-                logincontrol1.IsOpen = true;
+               // RootPopupBorder.Width = 646;
+                //      logincontrol1.HorizontalOffset = Window.Current.Bounds.Width - 550;
+                //      logincontrol1.VerticalOffset = Window.Current.Bounds.Height - 1000;
+                editPopup.IsOpen = true;
+               
+                DataContext = new ToDoTaskListViewModel(selected);
+            } else
+            {
+                MessageDialog msgbox = new MessageDialog("Zaznacz element!");
+                await msgbox.ShowAsync();
             }
+            }
+
+
+
+
+        private void editTask(object sender, RoutedEventArgs e)
+        {
+            if (Title.Text != "" && Value.Text != "" && CreatedAt.Text != "")
+            {
+                DateTime Test;
+                if (!DateTime.TryParseExact(CreatedAt.Text, "dd-MM-yyyy HH:mm:ff", null, DateTimeStyles.None, out Test))
+                {
+
+                    alert.Text = "Podaj datę w formacie: dd - MM - yyyy HH: mm:ff";
+                    CreatedAt.Background = new SolidColorBrush(Colors.Red);
+                }
+                else {
+                  
+                    viewModel.putTask(selected, Title.Text, Value.Text, CreatedAt.Text);
+                    editPopup.IsOpen = false;
+                    this.Frame.Navigate(typeof(ToDoTaskList));
+                }
+            }
+            else
+            {   
+                Debug.WriteLine("Błąd, puste pola!");
+                alert.Text="Uzupełnij wszystkie pola!";
+            }
+        }
+
+        private void Cancel(object sender, RoutedEventArgs e)
+        {
+            editPopup.IsOpen = false;
+            this.Frame.Navigate(typeof(ToDoTaskList));
         }
     }
 }

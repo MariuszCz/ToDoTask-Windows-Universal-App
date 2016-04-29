@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -9,6 +10,7 @@ using ToDoTask.ViewModel;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
+using Windows.UI;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -41,18 +43,29 @@ namespace ToDoTask
 
         private async void button_add(object sender, RoutedEventArgs e)
         {
+        
             if (Title.Text != "" && Value.Text != "")
             {
-                TaskManagement taskManagement = new TaskManagement();
-                taskManagement.addTask(Title.Text, Value.Text);
-                Debug.WriteLine("Dodaje zadanie");
+                MainPageViewModel viewModel = new MainPageViewModel();
+                    viewModel.addTask(Title.Text, Value.Text);
+                    Debug.WriteLine("Dodaje zadanie");
+                MessageDialog msgbox = new MessageDialog("Zadanie dodano!");
+                await msgbox.ShowAsync();
+                this.Frame.Navigate(typeof(MainPage));
             }
             else
             {
-                Debug.WriteLine("Błąd, puste pola!");
-                MessageDialog msgbox = new MessageDialog("Uzupełnij wszystkie pola!");
-
-                await msgbox.ShowAsync();
+                if (Value.Text == "")
+                {
+                    Value.Background = new SolidColorBrush(Colors.Red);
+                    alert.Text = "Uzupełnij value!";
+                }
+                if (Title.Text == "")
+                {
+                    Title.Background = new SolidColorBrush(Colors.Red);
+                    alert.Text = "Uzupełnij title!";
+                }
+            
             }
 
 
