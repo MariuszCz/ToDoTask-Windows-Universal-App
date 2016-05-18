@@ -39,7 +39,34 @@ namespace ToDoTask
         {
             return DataContext as MainPageViewModel;
         }
-    
+
+        private void validateTitle(object sender, RoutedEventArgs e)
+        {
+            if (Title.Text == "")
+            {
+                Title.Background = new SolidColorBrush(Colors.Red);
+                alert.Text = "Uzupełnij title!";
+            }
+            else
+            {
+                Title.Background = new SolidColorBrush(Colors.Green);
+                alert.Text = "";
+            }
+        }
+
+        private void validateValue(object sender, RoutedEventArgs e)
+        {
+            if (Value.Text == "")
+            {
+                Value.Background = new SolidColorBrush(Colors.Red);
+                alert.Text = "Uzupełnij value!";
+            }
+            else
+            {
+                Value.Background = new SolidColorBrush(Colors.Green);
+                alert.Text = "";
+            }
+        }
 
         private async void button_add(object sender, RoutedEventArgs e)
         {
@@ -55,17 +82,9 @@ namespace ToDoTask
             }
             else
             {
-                if (Value.Text == "")
-                {
-                    Value.Background = new SolidColorBrush(Colors.Red);
-                    alert.Text = "Uzupełnij value!";
-                }
-                if (Title.Text == "")
-                {
-                    Title.Background = new SolidColorBrush(Colors.Red);
-                    alert.Text = "Uzupełnij title!";
-                }
-            
+                validateValue(sender, e);
+                validateTitle(sender, e);
+                          
             }
 
 

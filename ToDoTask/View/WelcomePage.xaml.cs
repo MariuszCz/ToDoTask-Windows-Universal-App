@@ -75,6 +75,13 @@ namespace ToDoTask
              localSettingsHandler.saveToLoadSettings("userLogin", login);
              this.Frame.Navigate(typeof(MainPage));
          }
-     }
+
+        private void button_info(object sender, RoutedEventArgs e)
+        {
+           // String login = Username.Text;
+           // localSettingsHandler.saveToLoadSettings("userLogin", login);
+            this.Frame.Navigate(typeof(AboutPage));
+        }
+    }
      
     }

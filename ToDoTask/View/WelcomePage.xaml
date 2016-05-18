@@ -11,5 +11,6 @@
         <TextBox x:Name="Username" HorizontalAlignment="Left" Margin="466,212,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="115" Width="519" FontSize="40"/>
         <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="108,212,0,0" TextWrapping="Wrap" Text="Your name:" VerticalAlignment="Top" FontSize="64"/>
         <AppBarButton x:Name="appBarButton" HorizontalAlignment="Left" Icon="Next" Label="Next" Margin="466,416,0,0" VerticalAlignment="Top" Click="button_next"/>
+        <AppBarButton x:Name="appBarButtonAbout" HorizontalAlignment="Left" Icon="ContactInfo" Label="About Author" Margin="893,411,0,0" VerticalAlignment="Top" Click="button_info" Height="65" Width="92"/>
     </Grid>
 </Page>

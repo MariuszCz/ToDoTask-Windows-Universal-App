@@ -8,8 +8,8 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <TextBox x:Name="Title" HorizontalAlignment="Left" Margin="590,112,0,0" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="103" Width="709" FontSize="40"/>
-        <TextBox x:Name="Value" HorizontalAlignment="Left" Margin="590,280,0,0" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="103
+        <TextBox x:Name="Title" HorizontalAlignment="Left" Margin="590,112,0,0" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="103" Width="709" TextChanged="validateTitle"  FontSize="40"/>
+        <TextBox x:Name="Value" HorizontalAlignment="Left" Margin="590,280,0,0" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" TextWrapping="Wrap" Text="" VerticalAlignment="Top" TextChanged="validateValue"  Height="103
                  " RenderTransformOrigin="0.5,0.5" Width="709" FontSize="40"/>
         <TextBlock Text="{Binding User, Mode=TwoWay}" HorizontalAlignment="Left" Margin="541,42,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="32"/>
         <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="278,128,0,0" TextWrapping="Wrap" Text="Title:" VerticalAlignment="Top" Height="87" Width="225" FontSize="64"/>
