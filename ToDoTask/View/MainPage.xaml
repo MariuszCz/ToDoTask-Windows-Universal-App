@@ -12,11 +12,11 @@
         <TextBox x:Name="Value" HorizontalAlignment="Left" Margin="590,280,0,0" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" TextWrapping="Wrap" Text="" VerticalAlignment="Top" TextChanged="validateValue"  Height="103
                  " RenderTransformOrigin="0.5,0.5" Width="709" FontSize="40"/>
         <TextBlock Text="{Binding User, Mode=TwoWay}" HorizontalAlignment="Left" Margin="541,42,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="32"/>
-        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="278,128,0,0" TextWrapping="Wrap" Text="Title:" VerticalAlignment="Top" Height="87" Width="225" FontSize="64"/>
-        <TextBlock x:Name="textBlock1" HorizontalAlignment="Left" Margin="260,280,0,0" TextWrapping="Wrap" Text="Value:" VerticalAlignment="Top" Height="72" Width="225" FontSize="64"/>
-        <AppBarButton x:Name="appBarButton" HorizontalAlignment="Left" Icon="Back" Label="Back" Margin="390,497,0,0" VerticalAlignment="Top" Click="button_back"/>
-        <AppBarButton x:Name="appBarButton_Copy" HorizontalAlignment="Left" Icon="Add" Label="Add task" Margin="563,497,0,0" VerticalAlignment="Top" Click="button_add"/>
-        <AppBarButton x:Name="appBarButton_Copy1" HorizontalAlignment="Left" Icon="ShowResults" Label="Show tasks" Margin="734,497,0,0" VerticalAlignment="Top" Click="button_tasks" RenderTransformOrigin="6.596,-0.213" Height="60" Width="105"/>
+        <TextBlock x:Name="title" x:Uid="title" HorizontalAlignment="Left" Margin="278,128,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Height="87" Width="225" FontSize="44"/>
+        <TextBlock x:Name="value" x:Uid="value" HorizontalAlignment="Left" Margin="240,280,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="72" Width="225" FontSize="44"/>
+        <AppBarButton x:Name="appBarButtonBack" HorizontalAlignment="Left" Icon="Back" Label="Back" Margin="390,497,0,0" VerticalAlignment="Top" Click="button_back"/>
+        <AppBarButton x:Name="appBarButtonAdd" HorizontalAlignment="Left" Icon="Add" Label="Add task" Margin="563,497,0,0" VerticalAlignment="Top" Click="button_add"/>
+        <AppBarButton x:Name="appBarButtonShow" HorizontalAlignment="Left" Icon="ShowResults" Label="Show tasks" Margin="734,497,0,0" VerticalAlignment="Top" Click="button_tasks" RenderTransformOrigin="6.596,-0.213" Height="60" Width="105"/>
         <TextBlock x:Name="alert" HorizontalAlignment="Left" Margin="709,448,0,0" TextWrapping="Wrap" Text="" Foreground="Red" VerticalAlignment="Top"/>
     </Grid>
 </Page>

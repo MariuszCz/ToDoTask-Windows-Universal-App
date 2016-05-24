@@ -21,9 +21,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace ToDoTask
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
+
     public sealed partial class WelcomePage : Page
     {
         private LocalSettingsHandler localSettingsHandler;
@@ -31,57 +29,46 @@ namespace ToDoTask
 
         public WelcomePage()
         {
- 
-                this.InitializeComponent();
-     
-            
+
+            this.InitializeComponent();
+
+
             localSettingsHandler = new LocalSettingsHandler();
 
-             String text = localSettingsHandler.getFromLoadSettings("userLogin");
-             if (text != null)
-             {
-                 Username.Text = text;
-             }
-             //    LoadUsername();
+            String text = localSettingsHandler.getFromLoadSettings("userLogin");
+            if (text != null)
+            {
+                Username.Text = text;
+            }
+        }
 
-         }
+        public void LoadUsername()
+        {
+           var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
 
-         public void LoadUsername()
-         {
+            Object value = localSettings.Values["exampleSetting"];
 
+            if (value == null)
+            {
+                localSettings.Values["exampleSetting"] = Username.Text;
+            }
+            else
+            {
+                Username.Text = value.ToString();
+            }
 
-             // Create a simple setting
+        }
 
-             var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-
-             // Read data from a simple setting
-
-             Object value = localSettings.Values["exampleSetting"];
-
-             if (value == null)
-             {
-                 localSettings.Values["exampleSetting"] = Username.Text;
-             }
-             else
-             {
-                 Username.Text = value.ToString();
-             }
-
-         }
-
-         private void button_next(object sender, RoutedEventArgs e)
-         {
-             String login = Username.Text;
-             localSettingsHandler.saveToLoadSettings("userLogin", login);
-             this.Frame.Navigate(typeof(MainPage));
-         }
+        private void button_next(object sender, RoutedEventArgs e)
+        {
+            String login = Username.Text;
+            localSettingsHandler.saveToLoadSettings("userLogin", login);
+            this.Frame.Navigate(typeof(MainPage));
+        }
 
         private void button_info(object sender, RoutedEventArgs e)
         {
-           // String login = Username.Text;
-           // localSettingsHandler.saveToLoadSettings("userLogin", login);
             this.Frame.Navigate(typeof(AboutPage));
         }
     }
-     
-    }
+}

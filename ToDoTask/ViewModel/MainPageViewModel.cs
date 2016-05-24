@@ -14,8 +14,10 @@ using Windows.UI.Xaml.Controls;
 
 namespace ToDoTask.ViewModel
 {
+   
     public class MainPageViewModel : ViewModel
     {
+        private ServerConnector server = new ServerConnector();
         private const string URL = "http://windowsphoneuam.azurewebsites.net/api/ToDoTasks";
         private LocalSettingsHandler localSettingsHandler;
 
@@ -65,12 +67,19 @@ namespace ToDoTask.ViewModel
             newTask.CreatedAt = formattedDate;
 
             string obj = JsonConvert.SerializeObject(newTask);
-
-            var conn = new HttpClient();
-            HttpResponseMessage respon = await conn.PostAsync(URL, new StringContent(obj, System.Text.Encoding.UTF8, "application/json"));
-            string responJsonText = await respon.Content.ReadAsStringAsync();
-            Debug.WriteLine("Wynik JSON'a:");
-            Debug.WriteLine(responJsonText);
+            try {
+                HttpResponseMessage respon = await server.conn.PostAsync(URL, new StringContent(obj, System.Text.Encoding.UTF8, "application/json"));
+                string responJsonText = await respon.Content.ReadAsStringAsync();
+                Debug.WriteLine("Wynik JSON'a:");
+                Debug.WriteLine(responJsonText);
+                MessageDialog msgbox = new MessageDialog("Zadanie dodano!");
+                await msgbox.ShowAsync();
+            } 
+            catch(Exception ex)
+            {
+                MessageDialog msgbox = new MessageDialog("Brak internetu!");
+                await msgbox.ShowAsync();
+            }
         }
 
         public MainPageViewModel()

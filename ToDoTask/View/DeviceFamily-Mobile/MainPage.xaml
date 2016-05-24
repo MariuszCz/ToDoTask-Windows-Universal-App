@@ -8,15 +8,15 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <TextBox x:Name="Title" HorizontalAlignment="Left" Margin="75,75,0,0" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="20" Width="200" TextChanged="validateTitle" FontSize="20"/>
-        <TextBox x:Name="Value" HorizontalAlignment="Left" Margin="75,122,0,0" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="20" RenderTransformOrigin="-0.433,-0.932" TextChanged="validateValue" Width="200" FontSize="20"/>
+        <TextBox x:Name="Title" HorizontalAlignment="Left" Margin="75,75,0,0" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="20" Width="200" TextChanged="validateTitle" FontSize="15"/>
+        <TextBox x:Name="Value" HorizontalAlignment="Left" Margin="75,122,0,0" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="20" RenderTransformOrigin="-0.433,-0.932" TextChanged="validateValue" Width="200" FontSize="15"/>
         <TextBlock Text="{Binding User, Mode=TwoWay}" HorizontalAlignment="Left" Margin="203,27,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="18.667"/>
-        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="10,85,0,0" TextWrapping="Wrap" Text="Title:" VerticalAlignment="Top" Height="32" Width="65" FontSize="14.667" RenderTransformOrigin="0.5,0.5">
+        <TextBlock x:Name="title" x:Uid="title" HorizontalAlignment="Left" Margin="10,85,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Height="32" Width="65" FontSize="14.667" RenderTransformOrigin="0.5,0.5">
         </TextBlock>
-        <TextBlock x:Name="textBlock1" HorizontalAlignment="Left" Margin="10,122,0,0" TextWrapping="Wrap" Text="Value:" VerticalAlignment="Top" Height="32" Width="65" FontSize="14.667"/>
-        <AppBarButton x:Name="appBarButton" HorizontalAlignment="Left" Icon="Back" Label="Back" Margin="11,288,0,0" VerticalAlignment="Top" Click="button_back" RenderTransformOrigin="-4.618,-4.039" Width="64"/>
-        <AppBarButton x:Name="appBarButton_Copy" HorizontalAlignment="Left" Icon="Add" Label="Add task" Margin="143,288,0,0" VerticalAlignment="Top" Click="button_add" Width="60"/>
-        <AppBarButton x:Name="appBarButton_Copy1" HorizontalAlignment="Left" Icon="ShowResults" Label="Show tasks" Margin="251,288,0,0" VerticalAlignment="Top" Click="button_tasks" RenderTransformOrigin="6.596,-0.213" Height="60" Width="61"/>
+        <TextBlock x:Name="value" x:Uid="value" HorizontalAlignment="Left" Margin="10,122,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="32" Width="65" FontSize="14.667"/>
+        <AppBarButton x:Name="appBarButtonBack" HorizontalAlignment="Left" Icon="Back" Label="Back" Margin="11,288,0,0" VerticalAlignment="Top" Click="button_back" RenderTransformOrigin="-4.618,-4.039" Width="64"/>
+        <AppBarButton x:Name="appBarButtonAdd" HorizontalAlignment="Left" Icon="Add" Label="Add task" Margin="143,288,0,0" VerticalAlignment="Top" Click="button_add" Width="60"/>
+        <AppBarButton x:Name="appBarButtonInfo" HorizontalAlignment="Left" Icon="ShowResults" Label="Show tasks" Margin="251,288,0,0" VerticalAlignment="Top" Click="button_tasks" RenderTransformOrigin="6.596,-0.213" Height="60" Width="61"/>
         <TextBlock x:Name="alert" HorizontalAlignment="Left" Margin="75,216,0,0" TextWrapping="Wrap" Text="" Foreground="Red" VerticalAlignment="Top" FontSize="12"/>
     </Grid>
 </Page>

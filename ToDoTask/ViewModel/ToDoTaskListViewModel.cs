@@ -19,8 +19,11 @@ namespace ToDoTask.ViewModel
     {
         private LocalSettingsHandler localSettingsHandler;
         private string user;
+        private bool progressRing = false;
         private ToDoTask popupTask;
         private ObservableCollection<ToDoTask> taskList;
+        private string baseURL = "http://windowsphoneuam.azurewebsites.net/api/ToDoTasks";
+        private ServerConnector server = new ServerConnector();
 
         public ObservableCollection<ToDoTask> TaskList
         {
@@ -42,6 +45,19 @@ namespace ToDoTask.ViewModel
             {
                 user = value;
                 NotifyPropertyChanged("User");
+            }
+        }
+
+        public bool ProgressRing
+        { 
+            get
+            {
+                return progressRing;
+            }
+            set
+            {
+                progressRing = value;
+                NotifyPropertyChanged("ProgressRing");
             }
         }
         public ToDoTask PopupTask
@@ -74,33 +90,52 @@ namespace ToDoTask.ViewModel
 
         public async void getTasks()
         {
-            var conn = new HttpClient();
-            conn.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            HttpResponseMessage response = await conn.GetAsync("http://windowsphoneuam.azurewebsites.net/api/ToDoTasks?OwnerId=" + getUser());
-            response.EnsureSuccessStatusCode();
-            string responseBody = await response.Content.ReadAsStringAsync();
-            TaskList = new ObservableCollection<ToDoTask>();
-            TaskList = (JsonConvert.DeserializeObject<ObservableCollection<ToDoTask>>(responseBody));
+
+            string url = baseURL + "?OwnerId=" + getUser();
+            try
+            {
+
+                HttpResponseMessage response = await server.conn.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+                string responseBody = await response.Content.ReadAsStringAsync();
+                TaskList = new ObservableCollection<ToDoTask>();
+                TaskList = (JsonConvert.DeserializeObject<ObservableCollection<ToDoTask>>(responseBody));
+            }
+            catch (Exception)
+            {
+                Debug.Write("Brak internetu!");
+                progressRing = true;
+                NotifyPropertyChanged("ProgressRing");
+            }
         }
+
 
         public async void getTask(string id)
         {
-            var conn = new HttpClient();
-            conn.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            HttpResponseMessage response = await conn.GetAsync("http://windowsphoneuam.azurewebsites.net/api/ToDoTasks/" + id);
-            response.EnsureSuccessStatusCode();
-            string responseBody = await response.Content.ReadAsStringAsync();
-            PopupTask = new ToDoTask();
-            PopupTask = (JsonConvert.DeserializeObject<ToDoTask>(responseBody));
+
+            string url = baseURL + "/" + id;
+            try
+            {
+                HttpResponseMessage response = await server.conn.GetAsync("http://windowsphoneuam.azurewebsites.net/api/ToDoTasks/" + id);
+                response.EnsureSuccessStatusCode();
+                string responseBody = await response.Content.ReadAsStringAsync();
+                PopupTask = new ToDoTask();
+                PopupTask = (JsonConvert.DeserializeObject<ToDoTask>(responseBody));
+            }
+            catch (Exception)
+            {
+                Debug.Write("Brak internetu!");
+                progressRing = true;
+                NotifyPropertyChanged("ProgressRing");
+            }
         }
 
         public async void putTask(string id, string title, string value, string createdAt)
         {
-
+            string url = baseURL + "/" + id;
             localSettingsHandler = new LocalSettingsHandler();
             ToDoTask putTask = new ToDoTask();
             String text = localSettingsHandler.getFromLoadSettings("userLogin");
-
 
             putTask.Id = id;
             putTask.Title = title;
@@ -109,23 +144,39 @@ namespace ToDoTask.ViewModel
             putTask.CreatedAt = createdAt;
 
             string obj = JsonConvert.SerializeObject(putTask);
-        
-            var conn = new HttpClient();
-            HttpResponseMessage respon = await conn.PutAsync("http://windowsphoneuam.azurewebsites.net/api/ToDoTasks/" + id, new StringContent(obj, Encoding.UTF8, "application/json"));
-            string responJsonText = await respon.Content.ReadAsStringAsync();
+            try
+            {
+                HttpResponseMessage respon = await server.conn.PutAsync(url, new StringContent(obj, Encoding.UTF8, "application/json"));
+                string responJsonText = await respon.Content.ReadAsStringAsync();
+            } catch(Exception)
+            {
+                Debug.Write("Brak internetu!");
+                progressRing = true;
+                NotifyPropertyChanged("ProgressRing");
+            }
+           
         }
 
         public async void deleteTask(string selected)
         {
-            string apiUrl = "http://windowsphoneuam.azurewebsites.net/api/ToDoTasks";
-
-            var objClint = new System.Net.Http.HttpClient();
-
-            System.Net.Http.HttpResponseMessage respon = await objClint.DeleteAsync(apiUrl + "/" + selected);
-            string responJsonText = await respon.Content.ReadAsStringAsync();
-            Debug.WriteLine("Wynik JSON'a:");
-            Debug.WriteLine(responJsonText);
-
+            try
+            {
+                HttpResponseMessage respon = await server.conn.DeleteAsync(baseURL + "/" + selected);
+                string responJsonText = await respon.Content.ReadAsStringAsync();
+                Debug.WriteLine("Wynik JSON'a:");
+                Debug.WriteLine(responJsonText);
+            }
+            catch (Exception)
+            {
+                Debug.Write("Brak internetu!");
+                progressRing = true;
+                NotifyPropertyChanged("ProgressRing");
+            }
+        }
+        public void Wait(int ms)
+        {
+            DateTime start = DateTime.Now;
+            while ((DateTime.Now - start).TotalMilliseconds < ms) { }
         }
 
         public ToDoTaskListViewModel()

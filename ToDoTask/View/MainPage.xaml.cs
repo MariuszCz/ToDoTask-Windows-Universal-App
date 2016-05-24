@@ -75,9 +75,7 @@ namespace ToDoTask
             {
                 MainPageViewModel viewModel = new MainPageViewModel();
                     viewModel.addTask(Title.Text, Value.Text);
-                    Debug.WriteLine("Dodaje zadanie");
-                MessageDialog msgbox = new MessageDialog("Zadanie dodano!");
-                await msgbox.ShowAsync();
+
                 this.Frame.Navigate(typeof(MainPage));
             }
             else

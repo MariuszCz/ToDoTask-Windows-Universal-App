@@ -8,9 +8,9 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <TextBox x:Name="Username" HorizontalAlignment="Left" Margin="68,175,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="41" Width="212" FontSize="40"/>
-        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="130,91,0,0" TextWrapping="Wrap" Text="Your name:" VerticalAlignment="Top" FontSize="18.667"/>
-        <AppBarButton x:Name="appBarButton" HorizontalAlignment="Left" Icon="Next" Label="Next" Margin="130,273,0,0" VerticalAlignment="Top" Click="button_next" Height="65" Width="92"/>
-        <AppBarButton x:Name="appBarButtonAbout" HorizontalAlignment="Left" Icon="ContactInfo" Label="About author" Margin="130,293,0,0" VerticalAlignment="Top" Click="button_info" Height="65" Width="92"/>
+        <TextBox x:Name="Username"  HorizontalAlignment="Left" Margin="68,175,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="41" Width="212" FontSize="20"/>
+        <TextBlock x:Name="username"  x:Uid="username" HorizontalAlignment="Left" Margin="130,91,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="18.667"/>
+        <AppBarButton x:Name="appBarButtonNext" HorizontalAlignment="Left" Icon="Next" Label="Next" Margin="68,287,0,0" VerticalAlignment="Top" Click="button_next" Height="65" Width="92"/>
+        <AppBarButton x:Name="appBarButtonAbout" HorizontalAlignment="Left" Icon="ContactInfo" Label="About author" Margin="188,287,0,0" VerticalAlignment="Top" Click="button_info" Height="65" Width="92"/>
     </Grid>
 </Page>

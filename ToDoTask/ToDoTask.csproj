@@ -101,6 +101,7 @@
     <Compile Include="Commands\ActionCommand.cs" />
     <Compile Include="LocalSettingsHandler.cs" />
     <Compile Include="ViewModel\MainPageViewModel.cs" />
+    <Compile Include="ViewModel\ServerConnector.cs" />
     <Compile Include="ViewModel\ToDoTaskListViewModel.cs" />
     <Compile Include="ViewModel\ViewModel.cs" />
     <Compile Include="View\ToDoTaskList.xaml.cs">
@@ -122,6 +123,8 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <PRIResource Include="View\Strings\en-US\Resources.resw" />
+    <PRIResource Include="View\Strings\pl-PL\Resources.resw" />
     <None Include="ToDoTask_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>

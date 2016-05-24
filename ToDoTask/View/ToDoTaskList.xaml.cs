@@ -65,6 +65,7 @@ namespace ToDoTask
             {
                 listView.Background = new SolidColorBrush(Colors.Red);
                 viewModel.deleteTask(selected);
+                viewModel.Wait(100);
                 this.Frame.Navigate(typeof(ToDoTaskList));
             }
             else
@@ -84,12 +85,18 @@ namespace ToDoTask
         {
 
             e.Handled = true;
-            ListViewItem item = sender as ListViewItem;
-            if (item == null) return;
-            if (e.Cumulative.Translation.X < 0)
+            ToDoTask task = ((ContentPresenter)sender).DataContext as ToDoTask;
+            if (task == null) return;
+            if (e.Cumulative.Translation.X > 50)
             {
-               //  deleteTask(sender);
-       
+                viewModel.deleteTask(task.Id);
+                viewModel.Wait(200);
+                this.Frame.Navigate(typeof(ToDoTaskList));
+            }
+            if (e.Cumulative.Translation.X < -50) { 
+                editPopup.IsOpen = true;
+
+                DataContext = new ToDoTaskListViewModel(task.Id);
             }
         }
 
@@ -97,21 +104,16 @@ namespace ToDoTask
         {
             if (!editPopup.IsOpen && selected != null)
             {
-               // RootPopupBorder.Width = 646;
-                //      logincontrol1.HorizontalOffset = Window.Current.Bounds.Width - 550;
-                //      logincontrol1.VerticalOffset = Window.Current.Bounds.Height - 1000;
                 editPopup.IsOpen = true;
-               
+
                 DataContext = new ToDoTaskListViewModel(selected);
-            } else
+            }
+            else
             {
                 MessageDialog msgbox = new MessageDialog("Zaznacz element!");
                 await msgbox.ShowAsync();
             }
-            }
-
-
-
+        }
 
         private void editTask(object sender, RoutedEventArgs e)
         {
@@ -120,14 +122,13 @@ namespace ToDoTask
                 DateTime Test;
                 if (!DateTime.TryParseExact(CreatedAt.Text, "dd-MM-yyyy HH:mm:ff", null, DateTimeStyles.None, out Test))
                 {
-
                     alert.Text = "Podaj datę w formacie: dd - MM - yyyy HH: mm:ff";
                     CreatedAt.Background = new SolidColorBrush(Colors.Red);
                 }
                 else {
-                  
                     viewModel.putTask(selected, Title.Text, Value.Text, CreatedAt.Text);
                     editPopup.IsOpen = false;
+                    viewModel.Wait(100);
                     this.Frame.Navigate(typeof(ToDoTaskList));
                 }
             }

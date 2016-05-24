@@ -6,52 +6,49 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="83,22,0,0" TextWrapping="Wrap" Text="Zadania użytkownika:" VerticalAlignment="Top" FontSize="48"/>
+    <SplitView x:Name="MenuSplitView">
+        <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <TextBlock x:Name="userTasks" x:Uid="userTasks" HorizontalAlignment="Left" Margin="83,22,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="48"/>
         <TextBlock x:Name="user" HorizontalAlignment="Left" Margin="181,110,0,0" TextWrapping="Wrap" Text="{Binding User, Mode=TwoWay}" VerticalAlignment="Top" FontSize="48"/>
         <AppBarButton x:Name="Back" HorizontalAlignment="Left" Icon="Back" Label="Back" Margin="108,194,0,0" VerticalAlignment="Top" Click="Back_Click"/>
         <AppBarButton x:Name="DeleteTask" HorizontalAlignment="Left" Icon="Delete" Label="Delete Task" Margin="242,194,0,0" VerticalAlignment="Top" Click="bar_delete"/>
+            <AppBarButton x:Name="EditTask" HorizontalAlignment="Left" Icon="Edit" Label="Edit Task" Margin="368,194,0,0" VerticalAlignment="Top" Click="ShowFlyoutPopup" RenderTransformOrigin="-0.36,2.096"/>
 
-        <ListView x:Name="listView"
+            <ProgressRing Margin="536,300,552,258" Height="162" Width="192" IsActive="{Binding ProgressRing}"/>
+
+                <ListView x:Name="listView"
           Margin="872,10,213,0"
           ItemsSource="{Binding TaskList}"
-                  SelectionMode = "Single"
+                 IsItemClickEnabled="True" SelectionMode="Single"
                   SelectionChanged="listView_SelectionChanged"
                    IsSwipeEnabled="False">
+                        <ListView.ItemTemplate>
 
-            <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ContentPresenter ManipulationMode="TranslateX, System"
+                                  ManipulationDelta="UIElement_OnManipulationDelta">
+                                    <Grid Height="140" Margin="6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="10,0,0,0">
 
-                <DataTemplate>
-                    <Grid Height="140" Margin="6">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <Border  Width="60" Height="100">
-                            <TextBlock Text="{Binding Id}" TextWrapping="NoWrap" FontSize="21.333"/>
-                        </Border>
-
-                        <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="10,0,0,0">
-                            <TextBlock Text="{Binding Title}" TextWrapping="NoWrap" FontSize="21.333"/>
-                            <TextBlock Text="{Binding Value}" TextWrapping="Wrap" FontSize="21.333"/>
-                            <TextBlock Text="{Binding OwnerId}" TextWrapping="NoWrap" FontSize="21.333"/>
-                            <TextBlock Text="{Binding CreatedAt}" TextWrapping="NoWrap" FontSize="21.333"/>
-                        </StackPanel>
-
-                    </Grid>
-
-                </DataTemplate>
-
-            </ListView.ItemTemplate>
-
-        </ListView>
+                                        <TextBlock Text="{Binding Title}" TextWrapping="NoWrap" FontSize="25"/>
+                                        <TextBlock Text="{Binding Value}" TextWrapping="Wrap" FontSize="20"/>
+                                        <TextBlock Text="{Binding OwnerId}" TextWrapping="NoWrap" FontSize="15"/>
+                                        <TextBlock Text="{Binding CreatedAt}" TextWrapping="NoWrap" FontSize="15"/>
+                                    </StackPanel>
+ 
+                            </Grid>
+                                </ContentPresenter>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
 
 
-        <AppBarButton x:Name="EditTask" HorizontalAlignment="Left" Icon="Edit" Label="Edit Task" Margin="368,194,0,0" VerticalAlignment="Top" Click="ShowFlyoutPopup" RenderTransformOrigin="-0.36,2.096"/>
-
-        <Popup x:Name="editPopup" IsOpen="False" IsLightDismissEnabled="True" >
+      
+    <Popup x:Name="editPopup" IsOpen="False" IsLightDismissEnabled="True" >
             <Popup.ChildTransitions>
                 <TransitionCollection>
                     <PaneThemeTransition />
@@ -60,19 +57,19 @@
             <Border BorderBrush="{StaticResource ApplicationForegroundThemeBrush}" Background="{StaticResource ApplicationPageBackgroundThemeBrush}" x:Name="RootPopupBorder">
                 <StackPanel Orientation="Vertical" Margin="400,200,0,0" Background="WhiteSmoke" Height="500"  x:Name="pop" Width="847" >
                     <StackPanel>
-                        <TextBlock Text="Edit your task"  HorizontalAlignment="Center" Foreground="Black" FontSize="25" Margin="0,40,0,0" />
+                        <TextBlock x:Uid="editTask" HorizontalAlignment="Center" Foreground="Black" FontSize="25" Margin="0,40,0,0" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,40" HorizontalAlignment="Center">
-                        <TextBlock Text="Title" Margin="10" Foreground="Black" FontSize="25" />
+                        <TextBlock x:Uid="title" Margin="10" Foreground="Black" FontSize="25" />
                         <TextBox x:Name="Title" Text="{Binding Path=PopupTask.Title, Mode=TwoWay}" IsSpellCheckEnabled="True" Height="40" Margin="13,1" Width="408"  >
                         </TextBox>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
-                        <TextBlock Text="Value" Foreground="Black"  FontSize="25" />
+                        <TextBlock x:Uid="value" Foreground="Black"  FontSize="25" />
                         <TextBox x:Name="Value" Text="{Binding Path=PopupTask.Value, Mode=TwoWay}" Height="40" Margin="5,1"  Width="408"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,40" HorizontalAlignment="Center" >
-                        <TextBlock Text="Created at" Foreground="Black"  FontSize="25" />
+                        <TextBlock x:Uid="created" Foreground="Black"  FontSize="25" />
                         <TextBox x:Name="CreatedAt"  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Text="{Binding Path=PopupTask.CreatedAt, Mode=TwoWay}" Height="40" Margin="5,1"  Width="408"/>
                     </StackPanel>
                     <TextBlock  x:Name="alert" Text="" Foreground="Red"  FontSize="20"/>
@@ -84,7 +81,7 @@
             </Border>
         </Popup>
     </Grid>
-
+    </SplitView>
 
 
 </Page>
