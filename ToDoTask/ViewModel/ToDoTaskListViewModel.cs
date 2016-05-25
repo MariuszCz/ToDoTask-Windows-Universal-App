@@ -22,7 +22,6 @@ namespace ToDoTask.ViewModel
         private bool progressRing = false;
         private ToDoTask popupTask;
         private ObservableCollection<ToDoTask> taskList;
-        private string baseURL = "http://windowsphoneuam.azurewebsites.net/api/ToDoTasks";
         private ServerConnector server = new ServerConnector();
 
         public ObservableCollection<ToDoTask> TaskList
@@ -49,7 +48,7 @@ namespace ToDoTask.ViewModel
         }
 
         public bool ProgressRing
-        { 
+        {
             get
             {
                 return progressRing;
@@ -90,16 +89,10 @@ namespace ToDoTask.ViewModel
 
         public async void getTasks()
         {
-
-            string url = baseURL + "?OwnerId=" + getUser();
             try
             {
-
-                HttpResponseMessage response = await server.conn.GetAsync(url);
-                response.EnsureSuccessStatusCode();
-                string responseBody = await response.Content.ReadAsStringAsync();
-                TaskList = new ObservableCollection<ToDoTask>();
-                TaskList = (JsonConvert.DeserializeObject<ObservableCollection<ToDoTask>>(responseBody));
+                TaskList = await server.getTasks(getUser());
+                NotifyPropertyChanged("TaskList");
             }
             catch (Exception)
             {
@@ -113,14 +106,9 @@ namespace ToDoTask.ViewModel
         public async void getTask(string id)
         {
 
-            string url = baseURL + "/" + id;
             try
             {
-                HttpResponseMessage response = await server.conn.GetAsync("http://windowsphoneuam.azurewebsites.net/api/ToDoTasks/" + id);
-                response.EnsureSuccessStatusCode();
-                string responseBody = await response.Content.ReadAsStringAsync();
-                PopupTask = new ToDoTask();
-                PopupTask = (JsonConvert.DeserializeObject<ToDoTask>(responseBody));
+                PopupTask = await server.getTask(id);
             }
             catch (Exception)
             {
@@ -132,39 +120,27 @@ namespace ToDoTask.ViewModel
 
         public async void putTask(string id, string title, string value, string createdAt)
         {
-            string url = baseURL + "/" + id;
             localSettingsHandler = new LocalSettingsHandler();
-            ToDoTask putTask = new ToDoTask();
             String text = localSettingsHandler.getFromLoadSettings("userLogin");
 
-            putTask.Id = id;
-            putTask.Title = title;
-            putTask.Value = value;
-            putTask.OwnerId = text;
-            putTask.CreatedAt = createdAt;
-
-            string obj = JsonConvert.SerializeObject(putTask);
             try
             {
-                HttpResponseMessage respon = await server.conn.PutAsync(url, new StringContent(obj, Encoding.UTF8, "application/json"));
-                string responJsonText = await respon.Content.ReadAsStringAsync();
-            } catch(Exception)
+                await server.putTask(id, title, value, createdAt, text);
+            }
+            catch (Exception)
             {
                 Debug.Write("Brak internetu!");
                 progressRing = true;
                 NotifyPropertyChanged("ProgressRing");
             }
-           
+
         }
 
         public async void deleteTask(string selected)
         {
             try
             {
-                HttpResponseMessage respon = await server.conn.DeleteAsync(baseURL + "/" + selected);
-                string responJsonText = await respon.Content.ReadAsStringAsync();
-                Debug.WriteLine("Wynik JSON'a:");
-                Debug.WriteLine(responJsonText);
+                await server.deleteTask(selected);
             }
             catch (Exception)
             {
@@ -173,6 +149,7 @@ namespace ToDoTask.ViewModel
                 NotifyPropertyChanged("ProgressRing");
             }
         }
+
         public void Wait(int ms)
         {
             DateTime start = DateTime.Now;
@@ -181,7 +158,7 @@ namespace ToDoTask.ViewModel
 
         public ToDoTaskListViewModel()
         {
-            getTasks();  
+            getTasks();
         }
         public ToDoTaskListViewModel(string id)
         {

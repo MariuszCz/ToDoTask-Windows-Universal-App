@@ -14,15 +14,14 @@ using Windows.UI.Xaml.Controls;
 
 namespace ToDoTask.ViewModel
 {
-   
+
     public class MainPageViewModel : ViewModel
     {
         private ServerConnector server = new ServerConnector();
-        private const string URL = "http://windowsphoneuam.azurewebsites.net/api/ToDoTasks";
         private LocalSettingsHandler localSettingsHandler;
 
         private string user;
- 
+
         public string User
         {
             get
@@ -52,30 +51,16 @@ namespace ToDoTask.ViewModel
 
         public async void addTask(String title, String value)
         {
-            ToDoTask newTask = new ToDoTask();
-            DateTimeOffset time = DateTimeOffset.Now;
-            string formattedDate = time.ToString("dd-MM-yyyy HH:mm:ff");
-
             localSettingsHandler = new LocalSettingsHandler();
-
             String text = localSettingsHandler.getFromLoadSettings("userLogin");
 
-            newTask.Id = "0";
-            newTask.Title = title;
-            newTask.Value = value;
-            newTask.OwnerId = text;
-            newTask.CreatedAt = formattedDate;
-
-            string obj = JsonConvert.SerializeObject(newTask);
-            try {
-                HttpResponseMessage respon = await server.conn.PostAsync(URL, new StringContent(obj, System.Text.Encoding.UTF8, "application/json"));
-                string responJsonText = await respon.Content.ReadAsStringAsync();
-                Debug.WriteLine("Wynik JSON'a:");
-                Debug.WriteLine(responJsonText);
+            try
+            {
+                await server.addTask(title, value, text);
                 MessageDialog msgbox = new MessageDialog("Zadanie dodano!");
                 await msgbox.ShowAsync();
-            } 
-            catch(Exception ex)
+            }
+            catch (Exception)
             {
                 MessageDialog msgbox = new MessageDialog("Brak internetu!");
                 await msgbox.ShowAsync();
@@ -83,7 +68,7 @@ namespace ToDoTask.ViewModel
         }
 
         public MainPageViewModel()
-        {   
+        {
             getUser();
         }
     }
